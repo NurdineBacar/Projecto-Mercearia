@@ -1,0 +1,39 @@
+import java.awt.Container;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+
+public class Janela extends JFrame {
+	private JButton btn;
+	public Janela() {
+		super("Minha Janela");
+		this.setLayout(null);
+		
+		btn= new JButton("Adicionar");
+		btn.setBounds(100, 60, 100, 25);
+		btn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				this.add(new Painel1());
+			}
+
+			private void add(Painel1 painel1) {
+				this.add(new Painel1());
+			}
+		});
+		this.add(btn);
+		
+		this.setSize(500,500);
+		this.setVisible(true);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setResizable(false);
+		this.setLocationRelativeTo(null);
+	}
+	
+	public static void main(String[] args) {
+		new Janela();	}
+}

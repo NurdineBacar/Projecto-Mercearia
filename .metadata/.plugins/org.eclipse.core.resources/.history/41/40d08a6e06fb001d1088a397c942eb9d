@@ -1,0 +1,42 @@
+package classesDeObjecto;
+
+public class Municipio {
+	private int codigo;
+	private String descricao, provincia,quantidadeR;
+	
+	
+	
+	public Municipio(int codigo, String descricao, String provincia, String quantidadeR) {
+		this.codigo = codigo;
+		this.descricao = descricao;
+		this.provincia = provincia;
+		this.quantidadeR = quantidadeR;
+	}
+	
+	public int getCodigo() {
+		return codigo;
+	}
+	public void setCodigo(int codigo) {
+		this.codigo = codigo;
+	}
+	public String getDescricao() {
+		return descricao;
+	}
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
+	public String getProvincia() {
+		return provincia;
+	}
+	public void setProvincia(String provincia) {
+		this.provincia = provincia;
+	}
+	public String getQuantidadeR() {
+		return quantidadeR;
+	}
+	public void setQuantidadeR(String quantidadeR) {
+		this.quantidadeR = quantidadeR;
+	}
+	
+	
+}

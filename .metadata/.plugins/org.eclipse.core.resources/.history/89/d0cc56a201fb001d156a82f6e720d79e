@@ -1,0 +1,42 @@
+package bd;
+
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.util.ArrayList;
+
+import javax.swing.JOptionPane;
+
+import classesDeObjecto.Candidato;
+
+public class Bd {
+	
+	public static ArrayList<Candidato> lerCandidato(){
+		ArrayList<Candidato> listacandidato= new ArrayList<>();
+		try {
+			FileReader file= new FileReader("candidatos.txt");
+			BufferedReader read= new BufferedReader(file);
+			
+			String []elem;
+			String linha=read.readLine();
+			while(linha!=null) {
+				elem= linha.split(";");
+				int  codigo= Integer.parseInt(elem[0]);
+				String nome=elem[1];
+				String bi=elem[2];
+				int qtdVotos= Integer.parseInt(elem[3]);
+				
+				listacandidato.add(new Candidato(codigo, nome, bi, bi, qtdVotos));
+				linha= read.readLine();
+			}
+		} catch (FileNotFoundException e) {
+			JOptionPane.showMessageDialog(null, "Ficheiro nao Encontrado");
+		}catch (IndexOutOfBoundsException e) {
+			// TODO: handle exception
+		}catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		return listacandidato;
+	}
+}

@@ -1,0 +1,378 @@
+package ClasseDeObjecto;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.lang.reflect.Array;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.StringTokenizer;
+
+import BD.Bd;
+
+public class Venda {
+	private int codigo;
+	private Produto produto;
+	private int quantidade;
+	private String nomeProduto,categoria;
+	private  String produtoString,dataDaVenda,venda,lote;
+	private double valorAPagar;
+	static Produto [] arrayProduto;
+	
+	
+	
+	public Venda(Produto produto, int quantidade,double valorAPagar, String dataDaVenda) {
+		this.codigo=this.setCodigo2();
+		this.produto = produto;
+		this.quantidade = quantidade;
+		this.dataDaVenda = dataDaVenda;
+		this.venda = this.setVenda();;
+		this.valorAPagar = valorAPagar;
+	}
+
+	public Venda(int codigo, Produto produto, double valorAPagar) {
+		this.codigo = codigo;
+		this.produto = produto;
+		this.valorAPagar = valorAPagar;
+//		this.dataDaVenda = dataDaVenda;
+	}
+	
+	public Venda(Produto produto, double valorAPagar, int quantidade) {
+		this.codigo = this.setCodigo();
+		this.produto = produto;
+		this.quantidade= quantidade;
+		this.valorAPagar = valorAPagar;
+	}
+	
+	public Venda(int codigo,Produto produto,int quantidade,double vApagar) {
+		this.codigo=codigo;
+		this.produto=produto;
+		this.quantidade=quantidade;
+		this.valorAPagar=vApagar;
+	}
+	
+	
+	
+	
+	public String getNomeProduto() {
+		return nomeProduto;
+	}
+
+	public void setNomeProduto(String nomeProduto) {
+		this.nomeProduto = nomeProduto;
+	}
+
+	public String getCategoria() {
+		return categoria;
+	}
+
+	public void setCategoria(String categoria) {
+		this.categoria = categoria;
+	}
+
+	public String getLote() {
+		return lote;
+	}
+
+	public void setLote(String lote) {
+		this.lote = lote;
+	}
+
+	public int getCodigo() {
+		return codigo;
+	}
+
+	public void setCodigo(int codigo) {
+		this.codigo = codigo;
+	}
+	
+	public int setCodigo() {
+		int codigo=0;
+		try {
+			ArrayList<Venda> listaVenda= Bd.listarVenda();
+			
+			for(int i=0;i<listaVenda.size();i++) {
+				if(listaVenda.get(i).getCodigo()==codigo) {
+					codigo++;
+				}
+			}
+		} catch (Exception e) {
+			
+		}
+		return this.codigo=codigo;
+	}
+	public int setCodigo2() {
+		int codigo=0;
+		try {
+			ArrayList<Venda> listaVenda= Bd.lerRelatorioVenda();
+			
+			for(int i=0;i<listaVenda.size();i++) {
+				if(listaVenda.get(i).getCodigo()==codigo) {
+					codigo++;
+				}
+			}
+		} catch (Exception e) {
+			
+		}
+		return this.codigo=codigo;
+	}
+
+	public Produto getProduto() {
+		return produto;
+	}
+
+	public void setProduto(Produto produto) {
+		this.produto = produto;
+	}
+
+	public double getValorAPagar() {
+		return valorAPagar;
+	}
+
+	
+	
+	public int getQuantidade() {
+		return quantidade;
+	}
+
+	public void setQuantidade(int quantidade) {
+		this.quantidade = quantidade;
+	}
+
+	public void setValorAPagar(int valorAPagar) {
+		this.valorAPagar = valorAPagar;
+	}
+
+	public String getProdutoString() {
+		return produtoString;
+	}
+
+	public void setProdutoString(String produtoString) {
+		this.produtoString = produtoString;
+	}
+
+	public String getDataDaVenda() {
+		return dataDaVenda;
+	}
+
+	public void setDataDaVenda(String dataDaVenda) {
+		this.dataDaVenda = dataDaVenda;
+	}
+
+	public String getVenda() {
+		return venda;
+	}
+
+	public void setVenda(String venda) {
+		this.venda = venda;
+	}
+	
+	public String setVenda() {		
+		return this.venda="Venda"+(Math.random()*88);
+	}
+
+	public String toString1() {
+		return codigo+";"+produto.toString3()+";"+quantidade+";"+valorAPagar;
+	}
+	public String toString2() {
+		return codigo+";"+produto.toString3()+";"+quantidade+";"+valorAPagar+";"+dataDaVenda;
+	}
+	public String toString3() {
+		return codigo+";"+produto.getNomeDoProduto()+";"+produto.getCategoria()+";"+produto.getLote()+";"+quantidade+";"+valorAPagar;
+	}
+	
+	public static void registoVenda(int codigo,Produto produto, int qtd,double soma) {
+		try {
+			FileWriter file= new FileWriter("venda.txt",true);
+			BufferedWriter write= new BufferedWriter(file);
+//			Date x= new Date();
+//			SimpleDateFormat simple= new SimpleDateFormat("dd/MM/yy");
+			
+			Venda venda= new Venda(produto, soma, qtd);
+			write.write(venda.toString1());
+			write.newLine();
+			write.close();
+			file.close();
+			ArrayList<Produto> listaProduto= Bd.listarProdutos();
+			arrayProduto=Bd.cancelarVenda(listaProduto);
+			for(int i=0;i<listaProduto.size();i++) {
+				if(codigo==listaProduto.get(i).getCodigo()) {
+					listaProduto.get(i).setQuantidade(listaProduto.get(i).getQuantidade()-qtd);
+				}
+			}
+			
+			FileWriter file2= new FileWriter("produtos.txt");
+			BufferedWriter write2= new BufferedWriter(file2);
+			
+			for(Produto prod: listaProduto) {
+				write2.write(prod.toString2());
+				write2.newLine();
+			}
+			write2.close();
+			file2.close();
+		} catch (FileNotFoundException e) {
+			// TODO: handle exception
+		}catch(Exception e) {
+			
+		}
+	}
+	
+	public static double calculoDaVenda() {
+		ArrayList<Venda> listaVenda=Bd.listarVenda();
+		double totalApagar=0;
+		for(int i=0;i<listaVenda.size();i++) {
+			totalApagar+=listaVenda.get(i).getValorAPagar();
+		}
+		return totalApagar;
+	}
+	
+	public void emissaoDeRecibo() {
+		
+	}
+	
+	public static void venda() {
+		try {
+			ArrayList<Venda> venda=Bd.listarVenda();
+			ArrayList<Produto> produto=Bd.listarProdutos();
+			
+			FileWriter file= new FileWriter("relatorioVenda.txt",true);
+			BufferedWriter write= new BufferedWriter(file);
+			int qtd=0;
+			for(int i=0;i<venda.size();i++) {
+				if(venda.get(i).getProduto().getNomeDoProduto().equalsIgnoreCase(produto.get(i).getNomeDoProduto())) {
+					qtd=produto.get(i).getQuantidade()-venda.get(i).getQuantidade();
+					produto.get(i).setQuantidade(qtd);
+	
+				}
+				write.write(venda.get(i).toString2());
+				write.newLine();
+			}
+			write.close();
+			file.close();
+			
+			FileWriter file2=new FileWriter("produtos.txt");
+			BufferedWriter write2= new BufferedWriter(file2);
+			
+			for(int i=0;i<produto.size();i++) {
+				write2.write(produto.get(i).toString2());
+				write2.newLine();
+			}
+			write2.close();
+			file2.close();
+			
+			limparVenda();
+		} catch (FileNotFoundException e) {
+			// TODO: handle exception
+		}catch(Exception e) {
+			
+		}
+	}
+	
+	public static void limparVenda() {
+		try {
+			FileWriter file= new FileWriter("venda.txt");
+			BufferedWriter write= new BufferedWriter(file);
+			
+			write.nullWriter();
+			write.close();
+			file.close();
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+	}
+	
+	public static void cancelarVenda() {	
+		try {
+			FileWriter file= new FileWriter("produtos.txt");
+			BufferedWriter write= new BufferedWriter(file);
+			for(int i=0;i<arrayProduto.length;i++) {
+				write.write(arrayProduto[i].toString2());
+				write.newLine();
+			}
+			write.close();
+			file.close();
+		} catch (FileNotFoundException e) {
+			// TODO: handle exception
+		}catch (IndexOutOfBoundsException e) {
+			// TODO: handle exception
+		}catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		
+	}
+	
+	public static void removerProduto(String nomeProduto,String lote,int quantidade) {
+		try {
+			ArrayList<Produto> produto= Bd.listarProdutos();
+			for(int i=0;i<produto.size();i++) {
+				if(nomeProduto.equals(produto.get(i).getNomeDoProduto()) && lote.equals(produto.get(i).getLote())) {
+					produto.get(i).setQuantidade(produto.get(i).getQuantidade()+quantidade);
+				}
+			}
+			FileWriter file= new FileWriter("produtos.txt");
+			BufferedWriter write= new BufferedWriter(file);
+			for(int i=0;i<produto.size();i++) {
+				write.write(produto.get(i).toString2());
+				write.newLine();
+			}
+			write.close();
+			file.close();	
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+	}
+	
+	public static void removerP(String codig) {
+	
+		 try{
+			 	ArrayList<Venda> listaVenda= new ArrayList<>();
+				FileReader file= new FileReader("venda.txt");
+				BufferedReader read= new BufferedReader(file);
+				
+				String linha= read.readLine();
+				StringTokenizer elemento;
+				int i=0;
+				
+				while(linha != null) {
+					elemento= new StringTokenizer(linha,";");
+					
+					int codigo= Integer.parseInt(elemento.nextToken());
+					String nomeProduto=elemento.nextToken();
+					String categoria=elemento.nextToken();
+					String lote=elemento.nextToken();
+					int quantidade=Integer.parseInt(elemento.nextToken());
+					double valorApagar=Double.parseDouble(elemento.nextToken());
+					
+					
+					 Produto produto= new Produto(nomeProduto, categoria, lote);
+					 if(codigo!=Integer.parseInt(codig)) {
+						 listaVenda.add( new Venda(codigo, produto, quantidade, valorApagar));
+						 linha=read.readLine();
+					 }
+					 
+				}
+				read.close();
+				file.close();
+				
+				FileWriter ficheiro= new FileWriter("venda.txt");
+				BufferedWriter write= new BufferedWriter(ficheiro);
+				for(Venda listaV: listaVenda) {
+					write.write(listaV.toString1());
+					write.newLine();
+				}
+				write.close();
+				ficheiro.close();
+				
+			} catch (FileNotFoundException e) {
+				// TODO: handle exception
+			}catch(Exception e) {
+				
+			}
+		
+	}
+}

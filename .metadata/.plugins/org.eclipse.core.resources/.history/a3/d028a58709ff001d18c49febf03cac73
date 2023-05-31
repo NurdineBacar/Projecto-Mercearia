@@ -1,0 +1,364 @@
+package InterfacesGraficas;
+
+import java.awt.Color;
+import java.awt.EventQueue;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
+import javax.swing.table.DefaultTableModel;
+
+import BD.Bd;
+import ClasseDeObjecto.Produto;
+import ClasseDeObjecto.Venda;
+import javax.swing.JMenuBar;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.SwingConstants;
+
+public class Venda_UI extends JFrame {
+
+	private JPanel contentPane;
+	private JTable tabelaListaProduto;
+	private JTextField txtNomeProduto;
+	private JTextField txtQuantidade;
+	private JTable tabelaVenda;
+	private int fila;
+	private String [][] venda;
+	private double soma,somaTotal;
+	private JButton btnAdicionarVenda;
+	
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					Venda_UI frame = new Venda_UI();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public Venda_UI() {
+		String [][] tabela= null;
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setBounds(100, 100, 1024, 730);
+		
+		JMenuBar menuBar = new JMenuBar();
+		menuBar.setForeground(new Color(255, 255, 255));
+		menuBar.setBackground(new Color(0, 0, 0));
+		menuBar.setBorderPainted(false);
+		setJMenuBar(menuBar);
+		
+		JMenu mnNewMenu = new JMenu("Ficheiro");
+		mnNewMenu.setBackground(new Color(0, 0, 0));
+		mnNewMenu.setForeground(new Color(255, 255, 255));
+		mnNewMenu.setFont(new Font("Segoe UI", Font.BOLD, 12));
+		menuBar.add(mnNewMenu);
+		
+		JMenuItem itemJanelaPrincipal = new JMenuItem("Janela Principal");
+		itemJanelaPrincipal.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new JanelaPrincipal().setVisible(true);
+				close();
+			}
+		});
+		itemJanelaPrincipal.setBackground(new Color(0, 0, 0));
+		itemJanelaPrincipal.setForeground(new Color(255, 255, 255));
+		itemJanelaPrincipal.setFont(new Font("Segoe UI", Font.BOLD, 12));
+		itemJanelaPrincipal.setHorizontalAlignment(SwingConstants.LEFT);
+		mnNewMenu.add(itemJanelaPrincipal);
+		
+		JMenuItem itemExit = new JMenuItem("Sair");
+		itemExit.setBackground(new Color(0, 0, 0));
+		itemExit.setForeground(new Color(255, 255, 255));
+		itemExit.setFont(new Font("Segoe UI", Font.BOLD, 12));
+		mnNewMenu.add(itemExit);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		
+		JPanel panel = new JPanel();
+		panel.setBackground(new Color(255, 255, 255));
+		panel.setBounds(10, 11, 627, 342);
+		contentPane.add(panel);
+		panel.setLayout(new GridLayout(1, 0, 0, 0));
+		
+		JScrollPane scrollPane = new JScrollPane();
+		panel.add(scrollPane);
+		
+		tabelaListaProduto = new JTable();
+		tabelaListaProduto.setBackground(new Color(255, 255, 255));
+		tabelaListaProduto.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				fila=tabelaListaProduto.getSelectedRow();
+				txtNomeProduto.setText(tabelaListaProduto.getValueAt(fila, 1)+"");
+				txtQuantidade.setText("");
+			}
+		});
+		tabelaListaProduto.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		tabelaListaProduto.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				fila=tabelaListaProduto.getSelectedRow();
+				txtNomeProduto.setText(tabelaListaProduto.getValueAt(fila, 1)+"");
+				txtQuantidade.setText("");
+			}
+		});
+		scrollPane.setViewportView(tabelaListaProduto);
+		tabelaListaProduto.setModel(new DefaultTableModel(
+			Bd.tabelaProdutoVenda(),
+			new String[] {
+				"#CODIGO", "NOME DO PRODUTO", "PRECO DE VENDA", "QUANTIDADE"
+			}
+		));
+		
+		JPanel panel_1 = new JPanel();
+		panel_1.setBackground(new Color(255, 255, 255));
+		panel_1.setBorder(new LineBorder(new Color(0, 0, 0)));
+		panel_1.setBounds(638, 11, 360, 342);
+		contentPane.add(panel_1);
+		panel_1.setLayout(null);
+		
+		JLabel lblNewLabel = new JLabel("Filtro Por Categoria");
+		lblNewLabel.setBounds(129, 12, 110, 14);
+		panel_1.add(lblNewLabel);
+		
+		JComboBox comboBox = new JComboBox();
+		comboBox.setModel(new DefaultComboBoxModel(new String[] {"                                       ---Selecione---", "Fruta", "Vegetal", "Carne", "Marisco", "Sabao", "Farinhas", "Refrigerante", "Chocolate", "Iogurte", "Cereal", "Bolacha", "Caneta", "Caderno", "Chips"}));
+		comboBox.setBackground(new Color(255, 255, 255));
+		comboBox.setBounds(15, 40, 329, 30);
+		panel_1.add(comboBox);
+		
+		JButton btnNewButton = new JButton("CANCELAR");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
+		btnNewButton.setFont(new Font("Comic Sans MS", Font.BOLD, 11));
+		btnNewButton.setBackground(new Color(255, 255, 255));
+		btnNewButton.setBounds(66, 93, 100, 33);
+		panel_1.add(btnNewButton);
+		
+		JButton btnAplicar = new JButton("APLICAR");
+		btnAplicar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Venda.limparVenda();
+			}
+		});
+		btnAplicar.setFont(new Font("Comic Sans MS", Font.BOLD, 11));
+		btnAplicar.setBackground(new Color(255, 255, 255));
+		btnAplicar.setBounds(193, 91, 100, 33);
+		panel_1.add(btnAplicar);
+		
+		JPanel panel_2 = new JPanel();
+		panel_2.setBackground(new Color(255, 255, 255));
+		panel_2.setBorder(new LineBorder(new Color(0, 0, 0)));
+		panel_2.setBounds(0, 147, 360, 194);
+		panel_1.add(panel_2);
+		panel_2.setLayout(null);
+		
+		txtNomeProduto = new JTextField();
+		txtNomeProduto.setEditable(false);
+		txtNomeProduto.setBounds(22, 35, 292, 26);
+		panel_2.add(txtNomeProduto);
+		txtNomeProduto.setColumns(10);
+		
+		JLabel lblNewLabel_1 = new JLabel("Nome do Produto");
+		lblNewLabel_1.setBounds(22, 10, 98, 14);
+		panel_2.add(lblNewLabel_1);
+		
+		JLabel lblNewLabel_2 = new JLabel("Quantidade");
+		lblNewLabel_2.setBounds(22, 72, 81, 14);
+		panel_2.add(lblNewLabel_2);
+		
+		txtQuantidade = new JTextField();
+		txtQuantidade.addKeyListener(new KeyAdapter() {
+			public void keyReleased(KeyEvent e) {
+				try {
+					fila=tabelaListaProduto.getSelectedRow();
+					int qtdTabela=Integer.parseInt(tabelaListaProduto.getValueAt(fila, 3).toString());
+					int qtd= Integer.parseInt(txtQuantidade.getText());
+					if(qtd>qtdTabela) {
+						btnAdicionarVenda.setEnabled(false);
+					}else {
+						btnAdicionarVenda.setEnabled(true);
+					}
+				} catch (NumberFormatException e2) {
+					// TODO: handle exception
+				}catch (Exception e2) {
+					// TODO: handle exception
+				}
+			}
+		});
+		txtQuantidade.setBounds(22, 97, 110, 20);
+		panel_2.add(txtQuantidade);
+		txtQuantidade.setColumns(10);
+		
+		btnAdicionarVenda = new JButton("Adicionar Venda");
+		btnAdicionarVenda.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				fila= tabelaListaProduto.getSelectedRow();
+				
+				int codigo1=Integer.parseInt(tabelaListaProduto.getValueAt(fila, 0)+"");
+				
+				int quantidadeCalculo=Integer.parseInt(txtQuantidade.getText());
+				String nomeProduto="",catg="",lote="";
+				double soma=0;
+				ArrayList<Produto> listaProduto=Bd.listarProdutos();
+				
+				
+				for(int i=0;i<listaProduto.size();i++) {
+					if(codigo1==listaProduto.get(i).getCodigo()) {
+						nomeProduto= listaProduto.get(i).getNomeDoProduto();
+						catg= listaProduto.get(i).getCategoria();
+						lote= listaProduto.get(i).getLote();
+						soma=listaProduto.get(i).getPrecoVenda()*quantidadeCalculo;
+					}
+				}
+				
+				Produto produto= new Produto(nomeProduto, catg, lote);
+				Venda.registoVenda(codigo1,produto, quantidadeCalculo, soma);
+				
+				
+				tabelaVenda.setModel(new DefaultTableModel(
+						Bd.tabelaVenda(),new String[] {
+								"NOME DO PRODUTO", "CATEGORIA", "LOTE", "QUANTIDADE", "TOTAL"
+						}
+						));
+				tabelaListaProduto.setModel(new DefaultTableModel(
+						Bd.tabelaProdutoVenda(),
+						new String[] {
+							"#CODIGO", "NOME DO PRODUTO", "PRECO DE VENDA", "QUANTIDADE"
+						}
+					));
+			}
+		});
+		btnAdicionarVenda.setFont(new Font("Comic Sans MS", Font.BOLD, 11));
+		btnAdicionarVenda.setBackground(new Color(255, 255, 255));
+		btnAdicionarVenda.setBounds(185, 132, 142, 33);
+		panel_2.add(btnAdicionarVenda);
+		
+		JPanel panel_3 = new JPanel();
+		panel_3.setBounds(10, 364, 988, 252);
+		contentPane.add(panel_3);
+		panel_3.setLayout(new GridLayout(1, 0, 0, 0));
+		
+		JScrollPane scrollPane_1 = new JScrollPane();
+		panel_3.add(scrollPane_1);
+		
+		tabelaVenda = new JTable();
+		scrollPane_1.setViewportView(tabelaVenda);
+		tabelaVenda.setModel(new DefaultTableModel(
+			Bd.tabelaVenda(),
+			new String[] {
+				"NOME DO PRODUTO", "CATEGORIA", "LOTE", "QUANTIDADE", "TOTAL"
+			}
+		));
+		
+		JButton btnRemover = new JButton("REMOVER");
+		btnRemover.setBackground(new Color(255, 255, 255));
+		btnRemover.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				fila= tabelaVenda.getSelectedRow();
+				int quantidade= Integer.parseInt(tabelaVenda.getValueAt(fila, 3).toString());
+				
+				Venda.removerProduto(tabelaVenda.getValueAt(fila, 0).toString(), tabelaVenda.getValueAt(fila, 2).toString(), quantidade);
+				
+				tabelaVenda.setModel(new DefaultTableModel(
+						Bd.tabelaProdutoVendaAdicionado(),
+						new String[] {
+							"NOME DO PRODUTO", "CATEGORIA", "LOTE", "QUANTIDADE", "TOTAL"
+						}
+					));
+				tabelaListaProduto.setModel(new DefaultTableModel(
+						Bd.tabelaProdutoVenda(),
+						new String[] {
+							"#CODIGO", "NOME DO PRODUTO", "PRECO DE VENDA", "QUANTIDADE"
+						}
+					));
+			}
+		});
+		btnRemover.setBounds(174, 627, 192, 31);
+		contentPane.add(btnRemover);
+		
+		JButton btnEfectuar = new JButton("EFECTUAR");
+		btnEfectuar.setBackground(new Color(255, 255, 255));
+		btnEfectuar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int vender=JOptionPane.showConfirmDialog(null,"O valor a pagar e de: "+Venda.calculoDaVenda()+" MT");
+				if(vender==0) {
+					Venda.venda();
+					tabelaVenda.setModel(new DefaultTableModel(
+							Bd.tabelaProdutoVendaAdicionado(),
+							new String[] {
+								"NOME DO PRODUTO", "CATEGORIA", "LOTE", "QUANTIDADE", "TOTAL"
+							}
+						));
+					tabelaListaProduto.setModel(new DefaultTableModel(
+							Bd.tabelaProdutoVenda(),
+							new String[] {
+								"#CODIGO", "NOME DO PRODUTO", "PRECO DE VENDA", "QUANTIDADE"
+							}
+						));
+				}
+			}
+		});
+		btnEfectuar.setBounds(437, 627, 192, 31);
+		contentPane.add(btnEfectuar);
+		
+		JButton btnCancelarVenda = new JButton("CANCELAR VENDA");
+		btnCancelarVenda.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Venda.cancelarVenda();
+			}
+		});
+		btnCancelarVenda.setBackground(Color.WHITE);
+		btnCancelarVenda.setBounds(680, 627, 192, 31);
+		contentPane.add(btnCancelarVenda);
+		tabelaListaProduto.getColumnModel().getColumn(1).setPreferredWidth(134);
+		tabelaListaProduto.getColumnModel().getColumn(2).setPreferredWidth(110);
+		tabelaListaProduto.getColumnModel().getColumn(3).setPreferredWidth(96);
+		
+		this.setLocationRelativeTo(null);
+		
+	}
+	
+	public void close() {
+		this.dispose();
+	}
+}

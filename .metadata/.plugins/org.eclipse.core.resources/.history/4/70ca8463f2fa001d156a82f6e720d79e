@@ -1,0 +1,40 @@
+package desenho;
+import java.util.Vector;
+
+public class Venda {
+	private int codigo_venda, qunatidade;
+	private Vector<Produto> repositorio_de_venda;
+	Produto produto;
+	
+	public Venda(int codigo_venda,Produto produto) {
+		this.codigo_venda = codigo_venda;
+		this.produto=produto;
+	}
+
+	public int getCodigo_venda() {
+		return codigo_venda;
+	}
+
+	public void setCodigo_venda(int codigo_venda) {
+		this.codigo_venda = codigo_venda;
+	}
+
+	public int getQunatidade() {
+		return qunatidade;
+	}
+
+	public void setQunatidade(int qunatidade) {
+		this.qunatidade = qunatidade;
+	}
+
+	public Produto getProduto() {
+		return produto;
+	}
+
+	public void setProduto(Produto produto) {
+		this.produto = produto;
+	}
+	
+	
+	
+}

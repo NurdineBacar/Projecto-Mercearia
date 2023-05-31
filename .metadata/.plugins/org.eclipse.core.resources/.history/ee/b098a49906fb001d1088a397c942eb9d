@@ -1,0 +1,80 @@
+package classesDeObjecto;
+
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+
+public class Municipio {
+	private int codigo;
+	private String nomeMunicipio,descricao, provincia;
+	private int quantidadeRencenciados,quantidadeVotos;
+	
+	
+	
+	
+	
+	public Municipio(String nomeMunicipio, String descricao, String provincia, int quantidadeRencenciados) {
+		this.codigo=this.setCodigo();
+		this.nomeMunicipio = nomeMunicipio;
+		this.descricao = descricao;
+		this.provincia = provincia;
+		this.quantidadeRencenciados = quantidadeRencenciados;
+		this.quantidadeVotos=0;
+	}
+
+
+
+	public Municipio(int codigo, String nomeMunicipio, String descricao, String provincia, int quantidadeRencenciados,
+			int quantidadeVotos) {
+		
+		this.codigo = codigo;
+		this.nomeMunicipio = nomeMunicipio;
+		this.descricao = descricao;
+		this.provincia = provincia;
+		this.quantidadeRencenciados = quantidadeRencenciados;
+		this.quantidadeVotos = quantidadeVotos;
+	}
+
+
+
+	public int getCodigo() {
+		return codigo;
+	}
+	public int setCodigo() {
+		return this.codigo ;
+	}
+	
+	public void setCodigo(int codigo) {
+		this.codigo = codigo;
+	}
+	public String getDescricao() {
+		return descricao;
+	}
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
+	public String getProvincia() {
+		return provincia;
+	}
+	public void setProvincia(String provincia) {
+		this.provincia = provincia;
+	}
+	public int getQuantidadeR() {
+		return quantidadeR;
+	}
+	public void setQuantidadeR(int quantidadeR) {
+		this.quantidadeR = quantidadeR;
+	}
+	
+	public String toString() {
+		return codigo+";"+nomeMunicipio+";"+descricao+";"+provincia+";"+quantidadeR;
+	}
+	
+	public static void main(String[] args) throws IOException{
+		FileWriter file= new FileWriter("municipios.txt",true);
+		BufferedWriter write= new BufferedWriter(file);
+		
+		Mun
+		
+	}
+}

@@ -1,0 +1,2 @@
+0;Pao;Bolacha;200.0;300.0;12/12/2022;12/12/2023;LoteBolacha1;rachid Combo-87522467-Av. paul samuel Cacomba;20
+1;Morango;Fruta;220.0;280.0;12/12/2022;12/12/2023;LoteFruta1;Antonio Sitoe-23451222-3123123123123;15

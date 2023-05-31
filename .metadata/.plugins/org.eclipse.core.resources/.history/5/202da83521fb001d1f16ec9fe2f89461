@@ -1,0 +1,22 @@
+package desenho;
+
+import java.awt.Color;
+import java.awt.Graphics;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+public class Painel2 extends JPanel{
+
+	public Painel2() {
+		
+	}
+	
+	@Override
+	public void paintComponents(Graphics g) {
+		super.paintComponents(g);
+		g.setColor(Color.black);
+		g.drawRect(250, 100, 300, 500);
+		
+	}
+}

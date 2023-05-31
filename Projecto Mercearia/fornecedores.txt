@@ -1,0 +1,4 @@
+2;rachid Combo;87522467;Av. paul samuel Cacomba
+3;Nurdine;23456789;maputo
+0;Antonio Sitoe;23451222;3123123123123
+1;olinda;234567;qwertyui

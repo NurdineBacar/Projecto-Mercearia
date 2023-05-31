@@ -1,0 +1,111 @@
+package InterfacesGraficas;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.EventQueue;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.logging.SimpleFormatter;
+
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
+import java.awt.Font;
+import javax.swing.JMenuBar;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+public class JanelaPrincipal extends JFrame {
+
+	private JPanel contentPane;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					JanelaPrincipal frame = new JanelaPrincipal();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public JanelaPrincipal() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 625, 453);
+		
+		JMenuBar menuBar = new JMenuBar();
+		setJMenuBar(menuBar);
+		
+		JMenu mnNewMenu = new JMenu("Ficheiros");
+		mnNewMenu.setFont(new Font("Segoe UI", Font.BOLD, 12));
+		menuBar.add(mnNewMenu);
+		
+		JMenuItem itemUsuario = new JMenuItem("Gestao Usuario");
+		itemUsuario.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			new Usuario_Cadastro_UI();
+			
+			}
+		});
+		itemUsuario.setFont(new Font("Segoe UI", Font.BOLD, 12));
+		mnNewMenu.add(itemUsuario);
+		
+		JMenuItem itemProduto = new JMenuItem("Gestao Produto");
+		itemProduto.setFont(new Font("Segoe UI", Font.BOLD, 12));
+		itemProduto.setHorizontalAlignment(SwingConstants.LEFT);
+		mnNewMenu.add(itemProduto);
+		
+		JMenuItem itemFornecedor = new JMenuItem("Gestao Fornecedor");
+		itemFornecedor.setFont(new Font("Segoe UI", Font.BOLD, 12));
+		itemFornecedor.setHorizontalAlignment(SwingConstants.LEFT);
+		mnNewMenu.add(itemFornecedor);
+		
+		JMenuItem itemVenda = new JMenuItem("Venda");
+		itemVenda.setHorizontalAlignment(SwingConstants.LEFT);
+		itemVenda.setFont(new Font("Segoe UI", Font.BOLD, 12));
+		mnNewMenu.add(itemVenda);
+		contentPane = new JPanel();
+		contentPane.setBackground(new Color(255, 255, 255));
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+		setContentPane(contentPane);
+		contentPane.setLayout(new BorderLayout(0, 0));
+		
+		Date data= new Date();
+		Locale lang= new Locale("pt","BR");
+		SimpleDateFormat  newData= new SimpleDateFormat("dd 'de' MMMM 'de' YY",lang);
+		
+		JLabel lblNewLabel = new JLabel(newData.format(data).toUpperCase());
+		lblNewLabel.setFont(new Font("Segoe Script", Font.BOLD, 25));
+		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		contentPane.add(lblNewLabel, BorderLayout.CENTER);
+		
+		SimpleDateFormat dia= new SimpleDateFormat("EEEE",lang);
+		JLabel lblNewLabel_1 = new JLabel(dia.format(data).toUpperCase());
+		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel_1.setFont(new Font("Segoe UI Variable", Font.BOLD, 45));
+		contentPane.add(lblNewLabel_1, BorderLayout.SOUTH);
+		
+		
+		
+	
+		
+		
+		
+		
+	}
+}
